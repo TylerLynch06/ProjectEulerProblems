@@ -1,0 +1,45 @@
+from fractions import Fraction
+
+##Traces a probability tree down to its roots
+##Will then climb back up, counting number of victories back up
+def bifurcate(acquired_blue = 0, turn_count = 1, branch_probability = Fraction(1), max_turns = 4):
+    ##acquired_red is number of red tokens the player has picked
+    ##red_count refers to the number of red tokens in the bag
+    acquired_red = (turn_count - 1) - acquired_blue
+    red_count = turn_count 
+
+    ##Play out the final turn, hence + 1
+    if turn_count == max_turns+1:
+        ##Returns 0 if end of a branch results in a loss, 1 if victory
+        ##if (acquired_blue > acquired_red):
+        ##    print(f"victory recorded. Acquired blue = {acquired_blue}. P = {branch_probability}")
+        return Fraction(int(acquired_blue > acquired_red))*branch_probability 
+    else:
+        probability_blue_draw = Fraction(1,(red_count+1))
+        probability_not_blue_draw = Fraction(1) - Fraction(probability_blue_draw)
+
+        ##Chance of choosing blue/red next branch
+        blue_branch_prob = branch_probability * probability_blue_draw
+        not_blue_branch_prob = branch_probability * probability_not_blue_draw
+        
+        ##Split branch, one where the player picks red, and one where the player picks blue
+        blue_branch = bifurcate(acquired_blue+1,turn_count+1,blue_branch_prob,max_turns)
+        red_branch = bifurcate(acquired_blue,turn_count+1,not_blue_branch_prob,max_turns)
+        return blue_branch + red_branch
+    
+def get_victory_probability(max_turns):
+    return bifurcate(max_turns=max_turns)
+
+def get_max_reward(probability):
+    reward = 0
+    reward_fraction = Fraction(1,probability)
+    if Fraction.is_integer(reward_fraction):
+        reward = Fraction.__round__(reward_fraction) - 1
+    else:
+        reward = Fraction.__floor__(reward_fraction)
+    return reward
+
+print("Beginning Simulation")
+expected_victories = get_victory_probability(15)
+print(f"{expected_victories} expected victory probability")
+print(f"£{get_max_reward(expected_victories)} maximum payout")
