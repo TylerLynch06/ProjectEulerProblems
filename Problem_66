@@ -1,0 +1,71 @@
+INVALID_SET = []
+for i in range(1,33):
+    INVALID_SET.append(i*i)
+
+def df(x):
+    return 2*x
+
+def f(x):
+    return x**2 - D*(y**2)-1
+
+def newtonStep(x,f,df):
+    return x - f(x)/df(x)
+
+def useRootFinder(x0):
+    x = x0
+    prevX = 0
+    prevDif = float("inf")
+    sig = 10**(-10)
+    steps = 0
+    while (prevDif>sig):
+        steps+=1
+        prevX = x
+        x = newtonStep(x,f,df)
+        if (abs(x-prevX)>prevDif):
+            print(f"DIVERGED at {x}")
+            return None
+        prevDif = abs(x-prevX)
+        ##print(f"STEPS : {steps}\nX : {x}\n")
+    print(prevDif,sig)
+    return x
+
+##Will return whatver was given to eVal
+def xPara(t):
+    return round((eVal(t)+1/eVal(t))/2,10)
+
+def yPara(t):
+    return round((eVal(t)-1/eVal(t))/(2*(D**0.5)),10)
+
+##E value returned based on what x must be
+def eVal(a):
+    return a+(a**2-1)**0.5
+
+def isNaturalNum(x):
+    return (int(x)==x and x != 0)
+
+def getMinX():
+    t = 1
+    y = 0.5
+    while not isNaturalNum(y):
+        y = yPara(t)
+        ##print(f"D : {D} ({t} , {y})")
+        t+=1
+    return t
+
+print("START\n")
+maxVal = 0
+maxD = 0
+
+
+for D in range(2,1001,1):
+    print(D)
+    if D not in INVALID_SET:
+        x = getMinX()
+        if x > maxVal:
+            x = maxVal
+            maxD = D
+print(maxVal,maxD)
+        
+    
+
+    
