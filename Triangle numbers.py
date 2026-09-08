@@ -1,0 +1,92 @@
+import numba
+from numba import jit
+jit(nopython=True)
+
+def scryBranch(triangle, row,column, depth,_sum=0,initialValue=0):
+    try:
+        if initialValue== 0:_sum+=triangle[row][column]
+        else: _sum+=initialValue
+        if depth<=0:
+            solutions.append([_sum,column])
+            return True
+        ##print(triangle[row+1][column])
+        branches = [triangle[row+1][column],triangle[row+1][column+1]]
+        sum1 = scryBranch(triangle,row+1,column,depth-1,_sum)
+        sum2 = scryBranch(triangle,row+1,column+1,depth-1,_sum)
+        (triangle,row+1,column+1,depth-1,_sum)
+        return True
+    except IndexError:
+        ##print("\n----External Branch----\n")
+        solutions.append([_sum,column])
+        return False
+    ##return sum1,sum2
+
+def branchArrange(triangle, depth, row=0,column=0):
+    currentRow=0
+    currentColumn=0
+    branches=True
+    solution=0
+    while branches == True:
+        branches = scryBranch(triangle, currentRow,currentColumn, depth,initialValue=solution)
+        if branches==False:
+            break
+        currentRow+=depth
+        ##Mole, digging deep
+        #print(f"\nValues : {len(solutions)} \n")
+        #print(solutions)
+        #print(f"\n------[Row : {currentRow}]------\n")
+        #for value in solutions:
+        #    print(f"Sum : {value[0]}\nColumn : {value[1]}\n")
+        solutions.sort(reverse=True)
+        
+        currentColumn = solutions[0][1]
+        solution = solutions[0][0]
+
+        print(f"Chosen Sum : {solutions[0][0]}")
+        #print(f"Chosen Column: {solutions[0][1]}")
+    print("Process Complete")
+
+
+##triangle=   [[75],
+##            [95, 64],
+##            [17, 47, 82],
+##            [18, 35, 87, 10],
+##            [20, 4, 82, 47, 65],
+##            [19, 1, 23, 75, 3, 34],
+##            [88, 2, 77, 73, 7, 63, 67],
+##            [99, 65, 4, 28, 6, 16, 70, 92],
+##            [41, 41, 26, 56, 83, 40, 80, 70, 33],
+##            [41, 48, 72, 33, 47, 32, 37, 16, 94, 29],
+##            [53, 71, 44, 65, 25, 43, 91, 52, 97, 51, 14],
+##            [70, 11, 33, 28, 77, 73, 17, 78, 39, 68, 17, 57],
+##            [91, 71, 52, 38, 17, 14, 91, 43, 58, 50, 27, 29, 48],
+##            [63, 66, 4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
+##            [4, 62, 98, 27, 23, 9, 70, 98, 73, 93, 38, 53, 60, 4, 23]]
+
+file = open("triangle.txt","r")
+
+triangle=[]
+
+for _set in file:
+    splitSet = _set.split(" ")
+    for i in range(len(splitSet)):
+        splitSet[i] = int(splitSet[i])
+    triangle.append(splitSet)
+
+for x in triangle: print(x)
+
+##input()
+
+##triangle = [[3],
+##            [7,4],
+##            [2,4,6],
+##            [8,5,9,3]]
+depth = 20
+
+solutions = []
+
+##scrySum(triangle,0,depth)
+
+for i in range(len(triangle)): pass
+
+branchArrange(triangle,depth)
