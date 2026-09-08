@@ -1,3 +1,4 @@
+##Problem 30
 totalSum = 0
 for i in range(10,4000000,1):
     if (i%10**(len(str(i))-1)!=0):
