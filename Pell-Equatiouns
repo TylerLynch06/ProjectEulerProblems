@@ -1,0 +1,53 @@
+from fractions import Fraction
+
+def getConFractionValues(N):
+    values = []
+    m0 = m = 0
+    d0 = d = 1
+    a0 = a= int(N**0.5)
+    values.append(a)
+    iterations = 0
+    while (a!=2*a0) or iterations == 0:
+        iterations+=1
+        m = d*a-m
+        d = (N-m**2)/d
+        a = int((a0+m)/d)
+        values.append(a)
+    ##print(values)
+    return values
+
+def solvePell(values):
+    a0 = values[0]
+    period = values[1:]
+    convergentIndex = 0
+    if len(period)%2==0:
+        convergentIndex = len(period)-1
+    else:
+        convergentIndex = 2*len(period)-1
+    return convergent(a0,period,convergentIndex)
+
+def convergent(a0, period, n):
+    seq = [a0] + period * ((n // len(period)) + 2)
+    seq = seq[:n+1]
+    num, den = 1, 0
+    for a in reversed(seq):
+        num, den = den + num*a, num
+    print(Fraction(num,den))
+    return Fraction(num, den)
+
+maxX = 0
+maxD = 0
+
+ALL_SQUARES = []
+for i in range(1,33,1):
+    ALL_SQUARES.append(i*i)
+
+for D in range(2,1001,1):
+    if D not in ALL_SQUARES:
+        answerFraction = solvePell(getConFractionValues(D))
+        ##print(answerFraction)
+        if (answerFraction.numerator>maxX):
+            maxX = answerFraction.numerator
+            maxD = D
+print(maxD)
+
